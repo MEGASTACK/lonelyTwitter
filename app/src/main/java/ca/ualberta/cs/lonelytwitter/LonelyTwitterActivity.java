@@ -23,10 +23,12 @@ public class LonelyTwitterActivity extends Activity {
 	private static final String FILENAME = "file.sav";
 	private EditText bodyText;
 	private ListView oldTweetsList;
-	
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Tweet tweet = new NormalTweet("");
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
@@ -81,7 +83,7 @@ public class LonelyTwitterActivity extends Activity {
 		try {
 			FileOutputStream fos = openFileOutput(FILENAME,
 					Context.MODE_APPEND);
-			fos.write(new String(date.toString() + " | " + text)
+			fos.write((date.toString() + " | " + text)
 					.getBytes());
 			fos.close();
 		} catch (FileNotFoundException e) {
