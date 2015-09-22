@@ -43,4 +43,11 @@
         android:layout_height="wrap_content"
         android:text="@string/save" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lab 3 - Tweet display activity"
+        android:id="@+id/displayTweetButton"
+        android:onClick="onTweetDisplayButtonSelected" />
+
 </LinearLayout>

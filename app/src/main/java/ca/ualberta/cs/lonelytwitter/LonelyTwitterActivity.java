@@ -16,6 +16,7 @@ import java.util.GregorianCalendar;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -113,4 +114,10 @@ public class LonelyTwitterActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
+
+    public void onTweetDisplayButtonSelected(View view) {
+        Intent intent = new Intent(this, ListDisplayActivity.class);
+        intent.putExtra("filename", FILENAME);
+        startActivity(intent);
+    }
 }
