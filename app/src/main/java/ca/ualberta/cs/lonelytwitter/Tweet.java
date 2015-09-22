@@ -40,6 +40,10 @@ public abstract class Tweet extends Object implements Tweetable {
         this.date = date;
     }
 
+    @Override
+    public String toString() {
+        return date.toString() + " | " + getText();
+    }
     public abstract Boolean isImportant();
 
 }
