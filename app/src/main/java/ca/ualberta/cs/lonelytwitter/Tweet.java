@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by joshua2 on 9/16/15.
  */
-public abstract class Tweet extends Object implements Tweetable {
+public abstract class Tweet extends Object implements Tweetable, Comparable<Tweet> {
     private String text;
     protected Date date;
 
@@ -46,4 +46,18 @@ public abstract class Tweet extends Object implements Tweetable {
     }
     public abstract Boolean isImportant();
 
+    public int compareTo(Tweet another) {
+        return getDate().compareTo(another.getDate());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this.getClass() != o.getClass()){
+            return false;
+        }
+        Tweet other = (Tweet) o;
+
+        return getDate().equals(other.getDate()) && getText().equals(other.getText());
+    }
 }
