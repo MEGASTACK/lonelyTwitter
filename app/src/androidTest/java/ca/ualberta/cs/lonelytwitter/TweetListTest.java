@@ -10,14 +10,27 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.IllegalFormatCodePointException;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by slevinsk on 9/28/15.
  */
-public class TweetListTest extends ActivityInstrumentationTestCase2 {
+public class TweetListTest extends ActivityInstrumentationTestCase2 implements MyObserver{
+
+    private Boolean wasNotified = Boolean.FALSE;
+    private volatile ArrayList<MyObserver> observers = new ArrayList<MyObserver>();
 
     public TweetListTest() {
         super(ca.ualberta.cs.lonelytwitter.LonelyTwitterActivity.class);
+    }
+
+    public void testAddObserver() {
+        TweetList list = new TweetList();
+        list.addObserver(this);
+        wasNotified = Boolean.FALSE;
+        list.add(new NormalTweet("tweet"));
+        assertTrue(wasNotified);
     }
 
     public void testAddTweet(){
@@ -111,5 +124,9 @@ public class TweetListTest extends ActivityInstrumentationTestCase2 {
         } catch (IllegalArgumentException e) {
             assertTrue("Exception was thrown! awesome", true);
         }
+    }
+
+    public void myNotify(MyObservable observable) {
+        wasNotified = Boolean.TRUE;
     }
 }

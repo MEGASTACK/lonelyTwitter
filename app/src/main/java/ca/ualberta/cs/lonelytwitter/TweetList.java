@@ -4,12 +4,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Observer;
+
 
 /**
  * Created by slevinsk on 9/28/15.
  */
-public class TweetList {
+public class TweetList implements MyObservable {
     private ArrayList<Tweet> tweets;
+    private ArrayList<MyObserver> observers = new ArrayList<MyObserver>();
+
+
+    public void notifyAllObservers(){
+        for(MyObserver observer: observers){
+            observer.myNotify(this);
+        }
+    }
 
     public TweetList() {
         tweets = new ArrayList<Tweet>();
@@ -21,6 +31,7 @@ public class TweetList {
         } else {
             throw new IllegalArgumentException("Dupe!");
         }
+        notifyAllObservers();
     }
 
     public void delete(Tweet tweet) {
@@ -48,5 +59,9 @@ public class TweetList {
 
     public void remove(Tweet t) {
         tweets.remove(t);
+    }
+
+    public void addObserver(MyObserver observer) {
+        observers.add(observer);
     }
 }
