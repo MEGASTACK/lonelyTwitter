@@ -10,16 +10,11 @@ import java.util.Observer;
 /**
  * Created by slevinsk on 9/28/15.
  */
-public class TweetList implements MyObservable {
+public class TweetList implements MyObservable, MyObserver {
     private ArrayList<Tweet> tweets;
     private ArrayList<MyObserver> observers = new ArrayList<MyObserver>();
 
 
-    public void notifyAllObservers(){
-        for(MyObserver observer: observers){
-            observer.myNotify(this);
-        }
-    }
 
     public TweetList() {
         tweets = new ArrayList<Tweet>();
@@ -31,6 +26,7 @@ public class TweetList implements MyObservable {
         } else {
             throw new IllegalArgumentException("Dupe!");
         }
+        tweet.addObserver(this);
         notifyAllObservers();
     }
 
@@ -63,5 +59,15 @@ public class TweetList implements MyObservable {
 
     public void addObserver(MyObserver observer) {
         observers.add(observer);
+    }
+
+    public void notifyAllObservers() {
+        for (MyObserver o: observers){
+            o.myNotify(this);
+        }
+    }
+
+    public void myNotify(MyObservable observable) {
+        notifyAllObservers();
     }
 }

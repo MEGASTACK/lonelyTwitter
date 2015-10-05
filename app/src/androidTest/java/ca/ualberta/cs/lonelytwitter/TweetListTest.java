@@ -4,6 +4,7 @@ import android.test.ActivityInstrumentationTestCase2;
 
 import junit.framework.TestCase;
 
+import java.security.acl.NotOwnerException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +24,19 @@ public class TweetListTest extends ActivityInstrumentationTestCase2 implements M
 
     public TweetListTest() {
         super(ca.ualberta.cs.lonelytwitter.LonelyTwitterActivity.class);
+    }
+
+    public void testTweetObserver() {
+        TweetList list = new TweetList();
+        list.addObserver(this);
+        wasNotified = Boolean.FALSE;
+        Tweet tweet = new NormalTweet("tweet");
+        list.add(tweet);
+        assertTrue(wasNotified);
+        wasNotified = Boolean.FALSE;
+        tweet.setText("different");
+        assertTrue(wasNotified);
+
     }
 
     public void testAddObserver() {

@@ -27,7 +27,7 @@ import android.widget.ListView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-public class LonelyTwitterActivity extends Activity {
+public class LonelyTwitterActivity extends Activity implements MyObserver {
 
 	private static final String FILENAME = "file.sav";
 	private EditText bodyText;
@@ -51,11 +51,10 @@ public class LonelyTwitterActivity extends Activity {
 
 			public void onClick(View v) {
 				setResult(RESULT_OK);
-				String text = bodyText.getText().toString();
-
-				tweets.add(new NormalTweet(text));
-                adapter.notifyDataSetChanged();
-                saveInFile();
+				String text = bodyText.getText().toString(); //move to controller
+				tweets.add(new NormalTweet(text));	//move to controller
+                saveInFile();					// move to model
+				adapter.notifyDataSetChanged();
 
 
 			}
@@ -120,4 +119,8 @@ public class LonelyTwitterActivity extends Activity {
         intent.putExtra("filename", FILENAME);
         startActivity(intent);
     }
+
+	public void myNotify(MyObservable observable) {
+		adapter.notifyDataSetChanged();
+	}
 }

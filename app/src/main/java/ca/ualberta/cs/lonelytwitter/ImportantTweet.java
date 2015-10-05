@@ -28,4 +28,7 @@ public class ImportantTweet extends Tweet {
         return "!!!" + super.getText();
     }
 
+    public void notifyAllObservers() {
+
+    }
 }
