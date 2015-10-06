@@ -41,38 +41,39 @@ public class LonelyTwitterActivity extends Activity implements MyObserver {
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		setContentView(R.layout.main); //view
 
-		bodyText = (EditText) findViewById(R.id.body);
-		Button saveButton = (Button) findViewById(R.id.save);
-		oldTweetsList = (ListView) findViewById(R.id.oldTweetsList);
+		bodyText = (EditText) findViewById(R.id.body); //view
+		Button saveButton = (Button) findViewById(R.id.save); //view
+		oldTweetsList = (ListView) findViewById(R.id.oldTweetsList); //view
 
 		saveButton.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View v) {
-				setResult(RESULT_OK);
+				setResult(RESULT_OK); //controller
 				String text = bodyText.getText().toString(); //move to controller
 				tweets.add(new NormalTweet(text));	//move to controller
-                saveInFile();					// move to model
-				adapter.notifyDataSetChanged();
-
-
+                saveInFile();					 // move to model
+				adapter.notifyDataSetChanged();  // view
 			}
-		});
+		}); //controller
 	}
 
 	@Override
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-        loadFromFile();
+        loadFromFile(); //model
 
         adapter = new ArrayAdapter<Tweet>(this,
-                R.layout.list_item, tweets);
-        oldTweetsList.setAdapter(adapter);
+                R.layout.list_item, tweets); //view
+        oldTweetsList.setAdapter(adapter); //view
 
 	}
 
+	/**
+	 * Put me in the model
+	 */
 	private void loadFromFile(){
 
 
@@ -94,7 +95,9 @@ public class LonelyTwitterActivity extends Activity implements MyObserver {
         }
 	}
 
-
+	/**
+	 * put me in the model
+	 */
 	private void saveInFile() {
 
         Gson gson = new Gson();
@@ -114,13 +117,13 @@ public class LonelyTwitterActivity extends Activity implements MyObserver {
 		}
 	}
 
-    public void onTweetDisplayButtonSelected(View view) {
+    public void onTweetDisplayButtonSelected(View view) { //controller
         Intent intent = new Intent(this, ListDisplayActivity.class);
         intent.putExtra("filename", FILENAME);
         startActivity(intent);
     }
 
 	public void myNotify(MyObservable observable) {
-		adapter.notifyDataSetChanged();
+		adapter.notifyDataSetChanged(); //view
 	}
 }
