@@ -29,11 +29,25 @@ public class LonelyTwitterActivity extends Activity {
 
 	private static final String FILENAME = "file.sav"; // model
 	private EditText bodyText;
-	private ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-	private ListView oldTweetsList;
+    private ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+    private ListView oldTweetsList;
 	private ArrayAdapter<Tweet> adapter;
+    private Button saveButton;
 
+    public ListView getOldTweetsList() {
+        return oldTweetsList;
+    }
 
+    public EditText getBodyText() {
+        return bodyText;
+    }
+    public Button getSaveButton() {
+        return saveButton;
+    }
+
+    public ArrayList<Tweet> getTweets() {
+        return tweets;
+    }
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -42,20 +56,20 @@ public class LonelyTwitterActivity extends Activity {
 		setContentView(R.layout.main);
 
 		bodyText = (EditText) findViewById(R.id.body);
-		Button saveButton = (Button) findViewById(R.id.save);
+        saveButton = (Button) findViewById(R.id.save);
 		oldTweetsList = (ListView) findViewById(R.id.oldTweetsList);
 
 		saveButton.setOnClickListener(new View.OnClickListener() {
 
-			public void onClick(View v) {
-				setResult(RESULT_OK);
-				String text = bodyText.getText().toString();
-				tweets.add(new NormalTweet(text));
-				saveInFile(); // model
-				// dataObject.saveInFile() //controller
-				adapter.notifyDataSetChanged(); // view
-			}
-		});
+            public void onClick(View v) {
+                setResult(RESULT_OK);
+                String text = bodyText.getText().toString();
+                tweets.add(new NormalTweet(text));
+                saveInFile(); // model
+                // dataObject.saveInFile() //controller
+                adapter.notifyDataSetChanged(); // view
+            }
+        });
 	}
 
 	@Override
