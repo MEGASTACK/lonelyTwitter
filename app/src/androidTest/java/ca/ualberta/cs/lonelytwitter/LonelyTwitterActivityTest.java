@@ -21,6 +21,8 @@ public class LonelyTwitterActivityTest extends ActivityInstrumentationTestCase2 
     private EditText bodyText;
     private Button saveButton;
     private String tweetText;
+    private EditText editTweetText;
+    private String newText;
 
     public LonelyTwitterActivityTest() {
         super(ca.ualberta.cs.lonelytwitter.LonelyTwitterActivity.class);
@@ -94,13 +96,24 @@ public class LonelyTwitterActivityTest extends ActivityInstrumentationTestCase2 
 
         //test that the tweet editor starts up with the correct tweet
 
-        EditText editTweetText = receiverActivity.getEditBox();
+        editTweetText = receiverActivity.getEditBox();
 
         assertEquals(editTweetText.getText().toString(), tweetText);
 
         //test that we can edit a tweet
 
-        // test jat we can push a save buton for the edited tweet
+        newText = "I changed the tweet!";
+
+        receiverActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                editTweetText.setText(newText);
+            }
+        });
+        getInstrumentation().waitForIdleSync();
+
+        assertEquals(newText, editTweetText.getText().toString());
+
+        // test that we can push a save button for the edited tweet
 
         // test that the modified tweet was saved
 

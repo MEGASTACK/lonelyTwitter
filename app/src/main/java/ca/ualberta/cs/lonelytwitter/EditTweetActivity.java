@@ -9,6 +9,7 @@ import android.widget.EditText;
 public class EditTweetActivity extends Activity {
 
     private EditText editBox;
+    private Tweet currentTweet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,9 +19,9 @@ public class EditTweetActivity extends Activity {
 
         int index = getIntent().getIntExtra("position", 0);
 
-        Tweet tweet = ApplicationState.getTweets().get(index);
+        currentTweet = ApplicationState.getTweets().get(index);
 
-        editBox.setText(tweet.getText());
+        editBox.setText(currentTweet.getText());
     }
 
     @Override
