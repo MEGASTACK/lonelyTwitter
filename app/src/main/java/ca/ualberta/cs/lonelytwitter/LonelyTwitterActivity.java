@@ -5,16 +5,13 @@ import java.io.BufferedWriter;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Date;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -29,11 +26,8 @@ import com.google.gson.reflect.TypeToken;
 
 public class LonelyTwitterActivity extends Activity {
 
-	private static final String FILENAME = "file.sav"; // model
-
     private LonelyTwitterActivity activity = this;
 	private EditText bodyText;
-    private ArrayList<Tweet> tweets = new ArrayList<Tweet>();
     private ListView oldTweetsList;
 	private ArrayAdapter<Tweet> adapter;
     private Button saveButton;
@@ -50,7 +44,7 @@ public class LonelyTwitterActivity extends Activity {
     }
 
     public ArrayList<Tweet> getTweets() {
-        return tweets;
+        return ApplicationState.tweets;
     }
 	/** Called when the activity is first created. */
 	@Override
@@ -66,6 +60,9 @@ public class LonelyTwitterActivity extends Activity {
         oldTweetsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(activity, EditTweetActivity.class);
+
+                Tweet t = (Tweet) parent.getAdapter().getItem(position);
+                intent.putExtra("position", position);
                 startActivity(intent);
             }
         });
@@ -75,7 +72,7 @@ public class LonelyTwitterActivity extends Activity {
             public void onClick(View v) {
                 setResult(RESULT_OK);
                 String text = bodyText.getText().toString();
-                tweets.add(new NormalTweet(text));
+                ApplicationState.tweets.add(new NormalTweet(text));
                 saveInFile(); // model
                 // dataObject.saveInFile() //controller
                 adapter.notifyDataSetChanged(); // view
@@ -89,22 +86,22 @@ public class LonelyTwitterActivity extends Activity {
 		super.onStart();
 		loadFromFile();
 		adapter = new ArrayAdapter<Tweet>(this,
-				R.layout.list_item, tweets);
+				R.layout.list_item, ApplicationState.tweets);
 		oldTweetsList.setAdapter(adapter);
 		adapter.notifyDataSetChanged();
 	}
 
 	private void loadFromFile() {
 		try {
-			FileInputStream fis = openFileInput(FILENAME);
+			FileInputStream fis = openFileInput(ApplicationState.FILENAME);
 			BufferedReader in = new BufferedReader(new InputStreamReader(fis));
 			Gson gson = new Gson();
 			// https://google-gson.googlecode.com/svn/trunk/gson/docs/javadocs/com/google/gson/Gson.html, 2015-09-23
 			Type arraylistType = new TypeToken<ArrayList<NormalTweet>>() {}.getType();
-			tweets = gson.fromJson(in, arraylistType);
+			ApplicationState.tweets = gson.fromJson(in, arraylistType);
 
 		} catch (FileNotFoundException e) {
-			tweets = new ArrayList<Tweet>();
+			ApplicationState.tweets = new ArrayList<Tweet>();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -112,10 +109,10 @@ public class LonelyTwitterActivity extends Activity {
 	
 	private void saveInFile() {
 		try {
-			FileOutputStream fos = openFileOutput(FILENAME, 0);
+			FileOutputStream fos = openFileOutput(ApplicationState.FILENAME, 0);
 			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
 			Gson gson = new Gson();
-			gson.toJson(tweets, out);
+			gson.toJson(ApplicationState.tweets, out);
 			out.flush();
 			fos.close();
 		} catch (FileNotFoundException e) {

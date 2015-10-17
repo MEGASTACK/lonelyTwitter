@@ -26,10 +26,10 @@ public class LonelyTwitterActivityTest extends ActivityInstrumentationTestCase2 
         super(ca.ualberta.cs.lonelytwitter.LonelyTwitterActivity.class);
     }
 
-    public void testStart() throws Exception {
-        Activity activity = getActivity();
-
-    }
+//    public void testStart() throws Exception {
+//        Activity activity = getActivity();
+//
+//    }
 
     public void testEditTweet() {
         LonelyTwitterActivity activity = (LonelyTwitterActivity) getActivity();
@@ -89,11 +89,14 @@ public class LonelyTwitterActivityTest extends ActivityInstrumentationTestCase2 
         assertEquals("Activity is of wrong type",
                 EditTweetActivity.class, receiverActivity.getClass());
 
-        // Remove the ActivityMonitor
-        getInstrumentation().removeMonitor(receiverActivityMonitor);
+
 
 
         //test that the tweet editor starts up with the correct tweet
+
+        EditText editTweetText = receiverActivity.getEditBox();
+
+        assertEquals(editTweetText.getText().toString(), tweetText);
 
         //test that we can edit a tweet
 
@@ -102,6 +105,9 @@ public class LonelyTwitterActivityTest extends ActivityInstrumentationTestCase2 
         // test that the modified tweet was saved
 
         //test that the modified tweet is in the tweet list
+
+        // Remove the ActivityMonitor
+        getInstrumentation().removeMonitor(receiverActivityMonitor);
 
         receiverActivity.finish(); //close activity test is good.
 

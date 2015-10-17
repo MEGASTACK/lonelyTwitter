@@ -4,13 +4,23 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 public class EditTweetActivity extends Activity {
+
+    private EditText editBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_tweet);
+        editBox = (EditText) findViewById(R.id.editTweetText);
+
+        int index = getIntent().getIntExtra("position", 0);
+
+        Tweet tweet = ApplicationState.getTweets().get(index);
+
+        editBox.setText(tweet.getText());
     }
 
     @Override
@@ -33,5 +43,9 @@ public class EditTweetActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public EditText getEditBox() {
+        return editBox;
     }
 }
