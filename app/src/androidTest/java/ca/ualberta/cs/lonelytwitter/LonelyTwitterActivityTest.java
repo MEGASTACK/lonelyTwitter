@@ -1,16 +1,11 @@
 package ca.ualberta.cs.lonelytwitter;
 
-import android.app.Activity;
 import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.TouchUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-
-import junit.framework.TestCase;
 
 /**
  * Created by wz on 14/09/15.
@@ -23,15 +18,12 @@ public class LonelyTwitterActivityTest extends ActivityInstrumentationTestCase2 
     private String tweetText;
     private EditText editTweetText;
     private String newText;
+    private Button saveTweetButton;
+    private ListView oldTweetList;
 
     public LonelyTwitterActivityTest() {
         super(ca.ualberta.cs.lonelytwitter.LonelyTwitterActivity.class);
     }
-
-//    public void testStart() throws Exception {
-//        Activity activity = getActivity();
-//
-//    }
 
     public void testEditTweet() {
         LonelyTwitterActivity activity = (LonelyTwitterActivity) getActivity();
@@ -59,7 +51,7 @@ public class LonelyTwitterActivityTest extends ActivityInstrumentationTestCase2 
 
 
         //get he list of weets from the view
-        final ListView oldTweetList = activity.getOldTweetsList();
+        oldTweetList = activity.getOldTweetsList();
         Tweet newestTweet = (Tweet) oldTweetList.getItemAtPosition(0);
         assertEquals(tweetText, newestTweet.getText());
 
@@ -115,9 +107,24 @@ public class LonelyTwitterActivityTest extends ActivityInstrumentationTestCase2 
 
         // test that we can push a save button for the edited tweet
 
+        saveTweetButton = receiverActivity.getSaveButton();
+        receiverActivity.runOnUiThread(new Runnable() {
+            public void run() {
+                saveTweetButton.performClick();
+            }
+        });
+        getInstrumentation().waitForIdleSync();
+
         // test that the modified tweet was saved
+        assertEquals(newText, ApplicationState.getTweets().get(0).getText());
+
 
         //test that the modified tweet is in the tweet list
+        oldTweetList = activity.getOldTweetsList();
+
+        Tweet tweet2 = (Tweet) oldTweetList.getItemAtPosition(0);
+        assertEquals(newText, tweet2.getText());
+
 
         // Remove the ActivityMonitor
         getInstrumentation().removeMonitor(receiverActivityMonitor);

@@ -2,14 +2,21 @@ package ca.ualberta.cs.lonelytwitter;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class EditTweetActivity extends Activity {
 
     private EditText editBox;
     private Tweet currentTweet;
+    private Button saveButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,11 +24,38 @@ public class EditTweetActivity extends Activity {
         setContentView(R.layout.activity_edit_tweet);
         editBox = (EditText) findViewById(R.id.editTweetText);
 
+        saveButton = (Button) findViewById(R.id.saveButton);
+
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
         int index = getIntent().getIntExtra("position", 0);
 
         currentTweet = ApplicationState.getTweets().get(index);
 
         editBox.setText(currentTweet.getText());
+
+        editBox.addTextChangedListener(new TextWatcher() {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            public void afterTextChanged(Editable s) {
+                currentTweet.setText(s.toString());
+
+            }
+        });
+
+
+
     }
 
     @Override
@@ -48,5 +82,9 @@ public class EditTweetActivity extends Activity {
 
     public EditText getEditBox() {
         return editBox;
+    }
+
+    public Button getSaveButton() {
+        return saveButton;
     }
 }
